@@ -32,6 +32,7 @@ dependencies = [
     { name = "japanize-matplotlib" },
     { name = "pandas" },
     { name = "seaborn" },
+    { name = "shared" },
     { name = "shiny" },
 ]
 
@@ -40,7 +41,17 @@ requires-dist = [
     { name = "japanize-matplotlib", specifier = ">=1.1.3" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "seaborn", specifier = ">=0.13.2" },
+    { name = "shared", specifier = ">=0.0.32" },
     { name = "shiny", specifier = ">=1.5.0" },
+]
+
+[[package]]
+name = "braq"
+version = "0.0.12"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/54/3b/1b918c408e11ca33f9b9dcecc8e08eac7762887dd42b584f0efb6fe26c55/braq-0.0.12.tar.gz", hash = "sha256:51dae51b863cbba2cd37da163df06b7dc5124904d2c26b92bda54c1bde66d74b", size = 15272, upload-time = "2024-12-10T20:48:53.856Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f3/53/ed5082619966b1d15b5c039ac722ba99956d92d4b08a9bd5eb4c3535cc1f/braq-0.0.12-py3-none-any.whl", hash = "sha256:41b7bdd0d004faef693751615fbb11c53ac0b886c772b83aea61ea6dc2f6e518", size = 26392, upload-time = "2024-12-10T20:48:50.813Z" },
 ]
 
 [[package]]
@@ -261,6 +272,19 @@ wheels = [
 ]
 
 [[package]]
+name = "kvf"
+version = "0.0.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "braq" },
+    { name = "paradict" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9c/f8/e1826c156d4f97cf4662a6110cbbcfd91b5e5570c8a88bf0a8270718621e/kvf-0.0.3.tar.gz", hash = "sha256:f4885b1bbe66c8c20fdabe5cedeb3c0e5d12a54ac495f9e5fcf6fed0e0c51b73", size = 4938, upload-time = "2024-12-10T20:49:13.171Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a8/db/4a8d3b1fef45cabcadf36f9a2231b2cde3dddd3a58ab1723119c7fbce34f/kvf-0.0.3-py3-none-any.whl", hash = "sha256:9d666e51cae512e3f95c55b77524e34d0095b278c81f96f7bbc7d37b5bd545c6", size = 4716, upload-time = "2024-12-10T20:49:11.815Z" },
+]
+
+[[package]]
 name = "linkify-it-py"
 version = "2.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -365,6 +389,7 @@ wheels = [
 name = "numpy"
 version = "2.3.5"
 source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/76/65/21b3bc86aac7b8f2862db1e808f1ea22b028e30a225a34a5ede9bf8678f2/numpy-2.3.5.tar.gz", hash = "sha256:784db1dcdab56bf0517743e746dfb0f885fc68d948aba86eeec2cba234bdf1c0", size = 20584950, upload-time = "2025-11-16T22:52:42.067Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/db/69/9cde09f36da4b5a505341180a3f2e6fadc352fd4d2b7096ce9778db83f1a/numpy-2.3.5-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:d0f23b44f57077c1ede8c5f26b30f706498b4862d3ff0a7298b8411dd2f043ff", size = 16728251, upload-time = "2025-11-16T22:50:19.013Z" },
     { url = "https://files.pythonhosted.org/packages/79/fb/f505c95ceddd7027347b067689db71ca80bd5ecc926f913f1a23e65cf09b/numpy-2.3.5-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:aa5bc7c5d59d831d9773d1170acac7893ce3a5e130540605770ade83280e7188", size = 12254652, upload-time = "2025-11-16T22:50:21.487Z" },
@@ -493,6 +518,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/a4/1e/1bac1a839d12e6a82ec6cb40cda2edde64a2013a66963293696bbf31fbbb/pandas-2.3.3-cp314-cp314t-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:2e3ebdb170b5ef78f19bfb71b0dc5dc58775032361fa188e814959b74d726dd5", size = 12121582, upload-time = "2025-09-29T23:30:43.391Z" },
     { url = "https://files.pythonhosted.org/packages/44/91/483de934193e12a3b1d6ae7c8645d083ff88dec75f46e827562f1e4b4da6/pandas-2.3.3-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:d051c0e065b94b7a3cea50eb1ec32e912cd96dba41647eb24104b6c6c14c5788", size = 12699963, upload-time = "2025-09-29T23:31:10.009Z" },
     { url = "https://files.pythonhosted.org/packages/70/44/5191d2e4026f86a2a109053e194d3ba7a31a2d10a9c2348368c63ed4e85a/pandas-2.3.3-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:3869faf4bd07b3b66a9f462417d0ca3a9df29a9f6abd5d0d0dbab15dac7abe87", size = 13202175, upload-time = "2025-09-29T23:31:59.173Z" },
+]
+
+[[package]]
+name = "paradict"
+version = "0.0.16"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/83/8cf8d94be55ab9ea783e1f8ece06059cd986bb482ad69f7be549839b9e07/paradict-0.0.16.tar.gz", hash = "sha256:d909d122bf47028a45334eb2280d1e1bcb401fda89986af42c39fd2fadf9de4d", size = 61471, upload-time = "2024-12-10T21:23:49.007Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1d/f9/a9807d307ba1837bb8799e1337f41edcdbb92ef6090668dc50f483a168bf/paradict-0.0.16-py3-none-any.whl", hash = "sha256:28df79f0dc0e68c8f8a3e9b7c75e67a85305ef7298653fc7a369a1bf4f58cb20", size = 61735, upload-time = "2024-12-10T21:23:45.408Z" },
 ]
 
 [[package]]
@@ -646,6 +680,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c", size = 1319958, upload-time = "2025-05-27T00:56:51.443Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922", size = 1201486, upload-time = "2025-05-27T00:56:49.664Z" },
+]
+
+[[package]]
+name = "shared"
+version = "0.0.32"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "kvf" },
+    { name = "paradict" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3f/39/f39c2560ac971efbf437f7ffa1d82a12fa77f50b0127e6e5ec5cc8d377df/shared-0.0.32.tar.gz", hash = "sha256:7308adc95c0dab14d0c99635cd8049d1f004cc7fef7396d3fe47323c34ec58c6", size = 7793, upload-time = "2024-12-10T20:49:22.469Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f9/03/da58e40386d8ebcdfa3617070a95ca1deb5a5e6aa3d4e15ea2045173d5ac/shared-0.0.32-py3-none-any.whl", hash = "sha256:f17962c0f0fe6a23015accc7cac029e1c24c4b14578094e1f7033a7a7ef16140", size = 29304, upload-time = "2024-12-10T20:49:19.763Z" },
 ]
 
 [[package]]

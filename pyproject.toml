@@ -8,5 +8,6 @@ dependencies = [
     "japanize-matplotlib>=1.1.3",
     "pandas>=2.3.3",
     "seaborn>=0.13.2",
+    "shared>=0.0.32",
     "shiny>=1.5.0",
 ]
