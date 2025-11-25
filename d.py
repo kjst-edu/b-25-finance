@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import japanize_matplotlib
+from scipy import stats
 
 from shiny import App, render, ui
 
@@ -58,7 +59,7 @@ app_ui = ui.page_fluid(
 def server(input, output, session):
     @render.plot
     def scatter_plot():
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(10, 6))
         
         # 選択された年度でフィルタリング
         selected_year = input.year()
@@ -67,41 +68,27 @@ def server(input, output, session):
         x_var = input.x_var()
         y_var = input.y_var()
         
+        # 欠損値を除外
+        df_clean = df_filtered[[x_var, y_var]].dropna()
+        
         # 散布図を作成
-        scatter = ax.scatter(df_filtered[x_var], df_filtered[y_var], 
-                            s=100, alpha=0.6)
+        sns.scatterplot(data=df_clean, x=x_var, y=y_var, s=100, alpha=0.6, ax=ax)
+        
+        # 相関係数を計算
+        if len(df_clean) > 1:
+            corr, p_value = stats.pearsonr(df_clean[x_var], df_clean[y_var])
+            
+            # 相関係数をグラフに表示
+            ax.text(0.05, 0.95, f'相関係数: {corr:.3f}\np値: {p_value:.4f}',
+                   transform=ax.transAxes,
+                   fontsize=11,
+                   verticalalignment='top',
+                   bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
         
         ax.set_xlabel(x_var, fontsize=12)
         ax.set_ylabel(y_var, fontsize=12)
         ax.set_title(f"{x_var} vs {y_var} ({selected_year})", fontsize=14)
         ax.grid(True, alpha=0.3)
-        
-        # ホバー時に都道府県名を表示する機能
-        annot = ax.annotate("", xy=(0,0), xytext=(10,10), textcoords="offset points",
-                           bbox=dict(boxstyle="round", fc="w", alpha=0.8),
-                           arrowprops=dict(arrowstyle="->"))
-        annot.set_visible(False)
-        
-        def update_annot(ind):
-            pos = scatter.get_offsets()[ind["ind"][0]]
-            annot.xy = pos
-            text = df_filtered.iloc[ind["ind"][0]]["地域"]
-            annot.set_text(text)
-        
-        def hover(event):
-            vis = annot.get_visible()
-            if event.inaxes == ax:
-                cont, ind = scatter.contains(event)
-                if cont:
-                    update_annot(ind)
-                    annot.set_visible(True)
-                    fig.canvas.draw_idle()
-                else:
-                    if vis:
-                        annot.set_visible(False)
-                        fig.canvas.draw_idle()
-        
-        fig.canvas.mpl_connect("motion_notify_event", hover)
         
         plt.tight_layout()
         return fig
