@@ -1,66 +1,46 @@
+import pandas as pd
 import csv
-import traceback # エラーの詳細を表示するための機能
 
-input_file = 'nme_R031.4079267.20251125114943.01.csv'   # 元ファイル名
-output_file = 'result.csv' # 出力ファイル名
-
-# ★重要★ エラーが出る場合、ここを 'utf-8' から 'cp932' (または 'shift_jis') に変えてください
-encoding_type = 'utf-8' 
-
-print("処理を開始します...")
+# ファイル名
+file_path = 'nme_R031.702729.20260113024255.01.csv'
 
 try:
-    with open(input_file, 'r', encoding=encoding_type, newline='') as f_in, \
-         open(output_file, 'w', encoding=encoding_type, newline='') as f_out:
-        
-        reader = csv.reader(f_in)
-        writer = csv.writer(f_out)
-
-        # 1. 最初の2行をスキップ（空読み）
-        try:
-            next(reader) # 1行目
-            next(reader) # 2行目
-        except StopIteration:
-            print("エラー: ファイルの行数が足りません。")
-            exit()
-
-        count = 0
-        # 2. 3行目以降を1行ずつ処理
-        for i, row in enumerate(reader, start=3):
-            # 空行（データがない行）はスキップ
-            if not row:
-                continue
-
-            # 要素が足りない行（西暦しかないなど）をスキップしてエラー回避
-            if len(row) < 2:
-                print(f"警告: {i}行目のデータが不足しているためスキップしました: {row}")
-                continue
-
-            try:
-                # 一番左（0番目）を「西暦」として取得
-                year = row[0]
-                
-                # 残りのデータ（1番目以降）をすべて取得
-                values = row[1:]
-
-                # 縦に並べて書き込み
-                for val in values:
-                    writer.writerow([year, val])
-                    count += 1
-            except Exception as e:
-                print(f"警告: {i}行目の処理中に問題が発生しました: {e}")
-
-    print(f"完了しました！ {output_file} に {count} 件のデータを出力しました。")
-
+    # 1. 最初の2行をスキップして読み込む
+    df = pd.read_csv(file_path, skiprows=2, header=None, encoding='cp932')
 except UnicodeDecodeError:
-    print("\n【エラー: 文字コードが違います】")
-    print(f"現在の設定は '{encoding_type}' です。")
-    print("コード内の encoding_type = 'cp932' (または 'shift_jis') に書き換えて再実行してください。")
-    
-except FileNotFoundError:
-    print(f"\n【エラー】ファイル '{input_file}' が見つかりません。")
+    df = pd.read_csv(file_path, skiprows=2, header=None, encoding='utf-8')
 
-except Exception as e:
-    print("\n【予期せぬエラーの詳細】")
-    # ここで本当のエラー原因を表示します
-    traceback.print_exc()
+# 2. 1列目（年度）を除外する
+df_values_only = df.iloc[:, 1:]
+
+# 3. 行の上下を逆転させる（最新年度を一番上に）
+df_reversed = df_values_only.iloc[::-1]
+
+# 4. データを1次元（1列）に変換
+flattened_data = df_reversed.values.flatten()
+
+# 5. 書式変換（.0の削除、および空データの「***」置換）
+def format_clean(x):
+    # 値が NaN（欠損値）または空文字の場合に "***" を返す
+    if pd.isna(x) or str(x).strip() == "":
+        return "***"
+    
+    try:
+        # 数値（float）で、かつ中身が整数であれば整数に変換して .0 を消す
+        val = float(x)
+        if val.is_integer():
+            return str(int(val))
+        else:
+            return str(val)
+    except (ValueError, TypeError):
+        # 数値でない場合はそのまま文字列で返す
+        return str(x)
+
+# 全データに適用
+cleaned_data = [format_clean(v) for v in flattened_data]
+
+# 6. 結果をCSVファイルとして保存
+result_series = pd.Series(cleaned_data)
+result_series.to_csv('output.csv', index=False, header=False, encoding='utf-8-sig', quoting=csv.QUOTE_ALL)
+
+print("空白を '***' に置換し、小数点を整理した 'output.csv' を作成しました。")
