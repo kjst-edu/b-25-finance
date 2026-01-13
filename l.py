@@ -202,3 +202,5 @@ def server(input, output, session):
         return f"選択: 年度={input.year()}, X軸={x_label}, Y軸={y_label}"
 
 app = App(app_ui, server)
+
+#p値は統計的な有意性を示す指標で、このコードでは2つの変数間の相関が偶然起きた可能性を表しています。
