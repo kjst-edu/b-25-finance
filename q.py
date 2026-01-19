@@ -12,13 +12,10 @@ df = pd.read_csv(csv_file, skiprows=4, na_values="***", thousands=r',')
 csv_file2 = Path(__file__).parent / "FEI_PREF_260106110839.csv"
 df2 = pd.read_csv(csv_file2, skiprows=4, na_values=["***", "X"], thousands=r',')
 
-<<<<<<< HEAD
 # 3つ目のCSVファイルの読み込み（就業者数・完全失業者数）
 csv_file3 = Path(__file__).parent / "FEI_PREF_260113120951.csv"
 df3 = pd.read_csv(csv_file3, skiprows=4, na_values=["***", "X"], thousands=r',')
 
-=======
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
 # 実際の列名を取得（最初の3列は調査年、地域関連として扱う）
 base_cols = ["調査年", "地域"]
 
@@ -33,38 +30,26 @@ available_cols_df2 = [col for col in df2.columns if "売上" in col or "C6301" i
 df2_cols = base_cols + available_cols_df2
 df2 = df2[df2_cols]
 
-<<<<<<< HEAD
 # df3から就業者数・完全失業者数の列を探す
 available_cols_df3 = [col for col in df3.columns if "就業者" in col or "完全失業者" in col or "F1102" in col or "F1107" in col]
 df3_cols = base_cols + available_cols_df3
 df3 = df3[df3_cols]
 
-=======
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
 # --- 結合前のデータ型統一（エラー対策） ---
 # 調査年を文字列に統一し、「年度」を削除
 df['調査年'] = df['調査年'].astype(str).str.replace('年度', '', regex=False)
 df2['調査年'] = df2['調査年'].astype(str).str.replace('年度', '', regex=False)
-<<<<<<< HEAD
 df3['調査年'] = df3['調査年'].astype(str).str.replace('年度', '', regex=False)
-=======
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
 
 # 地域も文字列に統一（数値や空欄による不一致を防ぐ）
 df['地域'] = df['地域'].astype(str)
 df2['地域'] = df2['地域'].astype(str)
-<<<<<<< HEAD
 df3['地域'] = df3['地域'].astype(str)
-=======
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
 # ----------------------------------------
 
 # データを結合
 df = df.merge(df2, on=['調査年', '地域'], how='left')
-<<<<<<< HEAD
 df = df.merge(df3, on=['調査年', '地域'], how='left')
-=======
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
 
 # 産業別売上の集計列を作成
 # 第一次産業売上
@@ -104,8 +89,6 @@ for col in df.columns:
         x_var_choices[col] = "企業所得"
     elif "貸出金" in col:  # 貸出金を優先的にチェック
         x_var_choices[col] = "貸出金"
-    elif "貸付金" in col:
-        x_var_choices[col] = "貸付金"
 
 # --- Y軸の変数の選択肢を動的に作成 ---
 y_var_choices = {}
@@ -114,15 +97,10 @@ for col in df.columns:
         y_var_choices[col] = "企業所得"
     elif "貸出金" in col:
         y_var_choices[col] = "貸出金"
-    elif "貸付金" in col:
-        y_var_choices[col] = "貸付金"
-<<<<<<< HEAD
     elif "就業者" in col or "F1102" in col:
         y_var_choices[col] = "就業者数"
     elif "完全失業者" in col or "F1107" in col:
         y_var_choices[col] = "完全失業者数"
-=======
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
 
 # 産業別売上を追加
 if "第一次産業売上" in df.columns:
@@ -136,29 +114,34 @@ if "第三次産業売上" in df.columns:
 x_default = list(x_var_choices.keys())[0] if x_var_choices else None
 y_default = "第一次産業売上" if "第一次産業売上" in y_var_choices else list(y_var_choices.keys())[0]
 
-# UI定義
+# UI定義（レイアウトを横並びに変更）
 app_ui = ui.page_fluid(
     ui.h2("都道府県データ可視化"),
-    ui.input_selectize(  
-        "year",  
-        "調査年度を選択:",  
-        {year: year for year in available_years},
-        selected="2020" if "2020" in available_years else available_years[0]
-    ),
-    ui.input_selectize(  
-        "x_var",  
-        "X軸の変数を選択:",  
-        x_var_choices,
-        selected=x_default
-    ),
-    ui.input_selectize(  
-        "y_var",  
-        "Y軸の変数を選択:",  
-        y_var_choices,
-        selected=y_default
-    ),
-    ui.output_ui("scatter_plot"),
-    ui.output_text("info")
+    ui.layout_sidebar(
+        ui.sidebar(
+            ui.input_selectize(  
+                "year",  
+                "調査年度を選択:",  
+                {year: year for year in available_years},
+                selected="2020" if "2020" in available_years else available_years[0]
+            ),
+            ui.input_selectize(  
+                "x_var",  
+                "X軸の変数を選択:",  
+                x_var_choices,
+                selected=x_default
+            ),
+            ui.input_selectize(  
+                "y_var",  
+                "Y軸の変数を選択:",  
+                y_var_choices,
+                selected=y_default
+            ),
+            ui.output_text("info"),
+            width=300
+        ),
+        ui.output_ui("scatter_plot")
+    )
 )
 
 # サーバー定義
@@ -189,7 +172,6 @@ def server(input, output, session):
         corr_text = ""
         if len(df_clean) > 1:
             corr, p_value = stats.pearsonr(df_clean[x_var], df_clean[y_var])
-<<<<<<< HEAD
             
             # p値を適切な形式で表示
             if p_value < 0.001:
@@ -201,9 +183,6 @@ def server(input, output, session):
             
             # サンプル数も表示
             corr_text = f"相関係数: {corr:.3f}, p値: {p_text}, n={len(df_clean)}"
-=======
-            corr_text = f"相関係数: {corr:.3f}, p値: {p_value:.4f}"
->>>>>>> ecd7826b301f0f8fd4a49df233ca88b39cc29e65
         
         # Plotlyで散布図を作成
         fig = px.scatter(
@@ -224,7 +203,7 @@ def server(input, output, session):
         )
         
         fig.update_layout(
-            width=800,
+            width=None,  # 自動幅調整
             height=600,
             hovermode='closest',
             font=dict(family="sans-serif")
