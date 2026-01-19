@@ -89,6 +89,8 @@ for col in df.columns:
         x_var_choices[col] = "企業所得"
     elif "貸出金" in col:  # 貸出金を優先的にチェック
         x_var_choices[col] = "貸出金"
+    elif "貸付金" in col:
+        x_var_choices[col] = "貸付金"
 
 # --- Y軸の変数の選択肢を動的に作成 ---
 y_var_choices = {}
@@ -97,6 +99,8 @@ for col in df.columns:
         y_var_choices[col] = "企業所得"
     elif "貸出金" in col:
         y_var_choices[col] = "貸出金"
+    elif "貸付金" in col:
+        y_var_choices[col] = "貸付金"
     elif "就業者" in col or "F1102" in col:
         y_var_choices[col] = "就業者数"
     elif "完全失業者" in col or "F1107" in col:
@@ -114,34 +118,29 @@ if "第三次産業売上" in df.columns:
 x_default = list(x_var_choices.keys())[0] if x_var_choices else None
 y_default = "第一次産業売上" if "第一次産業売上" in y_var_choices else list(y_var_choices.keys())[0]
 
-# UI定義（レイアウトを横並びに変更）
+# UI定義
 app_ui = ui.page_fluid(
     ui.h2("都道府県データ可視化"),
-    ui.layout_sidebar(
-        ui.sidebar(
-            ui.input_selectize(  
-                "year",  
-                "調査年度を選択:",  
-                {year: year for year in available_years},
-                selected="2020" if "2020" in available_years else available_years[0]
-            ),
-            ui.input_selectize(  
-                "x_var",  
-                "X軸の変数を選択:",  
-                x_var_choices,
-                selected=x_default
-            ),
-            ui.input_selectize(  
-                "y_var",  
-                "Y軸の変数を選択:",  
-                y_var_choices,
-                selected=y_default
-            ),
-            ui.output_text("info"),
-            width=300
-        ),
-        ui.output_ui("scatter_plot")
-    )
+    ui.input_selectize(  
+        "year",  
+        "調査年度を選択:",  
+        {year: year for year in available_years},
+        selected="2020" if "2020" in available_years else available_years[0]
+    ),
+    ui.input_selectize(  
+        "x_var",  
+        "X軸の変数を選択:",  
+        x_var_choices,
+        selected=x_default
+    ),
+    ui.input_selectize(  
+        "y_var",  
+        "Y軸の変数を選択:",  
+        y_var_choices,
+        selected=y_default
+    ),
+    ui.output_ui("scatter_plot"),
+    ui.output_text("info")
 )
 
 # サーバー定義
@@ -203,7 +202,7 @@ def server(input, output, session):
         )
         
         fig.update_layout(
-            width=None,  # 自動幅調整
+            width=800,
             height=600,
             hovermode='closest',
             font=dict(family="sans-serif")

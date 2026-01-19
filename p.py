@@ -89,6 +89,8 @@ for col in df.columns:
         x_var_choices[col] = "企業所得"
     elif "貸出金" in col:  # 貸出金を優先的にチェック
         x_var_choices[col] = "貸出金"
+    elif "貸付金" in col:
+        x_var_choices[col] = "貸付金"
 
 # --- Y軸の変数の選択肢を動的に作成 ---
 y_var_choices = {}
@@ -97,6 +99,8 @@ for col in df.columns:
         y_var_choices[col] = "企業所得"
     elif "貸出金" in col:
         y_var_choices[col] = "貸出金"
+    elif "貸付金" in col:
+        y_var_choices[col] = "貸付金"
     elif "就業者" in col or "F1102" in col:
         y_var_choices[col] = "就業者数"
     elif "完全失業者" in col or "F1107" in col:
